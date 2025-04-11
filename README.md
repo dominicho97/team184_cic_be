@@ -9,7 +9,7 @@ GenAI Hackaton  team 184 CIC Belgium
 Git clone (repository-link)
 2. **Set up virtual environment (venv)**
 <br>In root folder:
-Windows:
+<br>Windows:
 `python -m venv venv`
 `venv\Scripts\activate`
 
