@@ -17,19 +17,20 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-# evironment variables.
+# environment variables
 load_dotenv()
 
 PROJECT_CONNECTION_STRING = os.environ.get("AZURE_AI_AGENT_PROJECT_CONNECTION_STRING")
 MODEL_DEPLOYMENT_NAME = os.environ.get("AZURE_AI_AGENT_MODEL_DEPLOYMENT_NAME")
 
-# Default query to sent to claimhandler (this can be changed via the text area)
+# Query to sent to claimhandler (this can be changed via the text area)
 CLAIM_QUERY = (
     "A customer holding Policy 2 is requesting damages of 4000 euros for claim type B. "
     "The customer states that these costs are due to being rear ended with their car, requiring "
     "costs to replace the rear bumper for their car."
 )
-# Included in query but hidden
+# Included in query but hidden, the claimhandler output is a specific JSON structure
+
 JSON_FORMAT = (
     "\nPlease provide a valid JSON response (no markdown formatting, just JSON) with the following structure:\n"
     '{\n'
@@ -68,6 +69,7 @@ if not (PROJECT_CONNECTION_STRING and MODEL_DEPLOYMENT_NAME and AGENTS_AND_QUERI
 #invoke agents
 async def invoke_agent(agent: AzureAIAgent, query: str) -> str:
     try:
+        #get_response from sk has built-in threading
         response = await agent.get_response(messages=query)
         if isinstance(response, tuple):
             response = response[0]
@@ -80,7 +82,7 @@ async def invoke_agent(agent: AzureAIAgent, query: str) -> str:
 async def process_claim_run_agents(custom_claim_query: str):
     results = {}
     try:
-        # Append JSON formatting instructions to the custom query.
+        # Append JSON formatting instructions to the final query to the agents.
         full_claim_query = custom_claim_query + JSON_FORMAT
 
         async with DefaultAzureCredential() as creds:
