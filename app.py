@@ -3,9 +3,7 @@ import asyncio
 import logging
 import json
 from typing import Any
-
 import streamlit as st
-
 from azure.identity.aio import DefaultAzureCredential  
 from dotenv import load_dotenv
 from semantic_kernel.agents.azure_ai.azure_ai_agent import AzureAIAgent
