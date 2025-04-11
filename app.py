@@ -147,6 +147,7 @@ async def process_claim_run_agents(custom_claim_query: str):
                     f"Using the following claim description: {claim_description}, "
                     "evaluate whether there are any red flags or suspicious elements in the claim."
                 )
+
                 #get agent from azure foundry
                 define_fraud_agent = await client.agents.get_agent(AGENTS_AND_QUERIES["FraudDetectionAgent"]["id"])
                 fraud_agent = AzureAIAgent(client=client, definition=define_fraud_agent)
@@ -156,13 +157,16 @@ async def process_claim_run_agents(custom_claim_query: str):
                 results["FraudDetectionAgent Output"] = fraud_assessment
                
                 
-                #  evaluatoragent 
+                
+                #  ClaimEvaluatorAgent
+                
                 #include policy and fraud output in input of claim_evaluator_agent
                 evaluator_query = (
                     f"Policy Assessment: {policy_assessment}\n"
                     f"Fraud Assessment: {fraud_assessment}\n"
                     "Based on the above assessments, should the claim be approved or rejected? Provide a concise explanation."
                 )
+                
                 #get agent from azure foundry
                 define_claim_evaluator_agent = await client.agents.get_agent(AGENTS_AND_QUERIES["ClaimEvaluatorAgent"]["id"])
                 claim_evaluator_agent = AzureAIAgent(client=client, definition=define_claim_evaluator_agent)
@@ -175,6 +179,7 @@ async def process_claim_run_agents(custom_claim_query: str):
         results["error"] = str(e)
     return results
 
+#-- Streamlit dashboard interface
 st.title("Insurance claim dashboard")
 st.write("Enter your claim query below and click the button to process the claim using Azure AI Agents.")
 
