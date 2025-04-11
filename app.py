@@ -89,6 +89,8 @@ async def process_claim_run_agents(custom_claim_query: str):
             async with AzureAIAgent.create_client(credential=creds, conn_str=PROJECT_CONNECTION_STRING) as client:
                 
                 #   ClaimHandlerAgent
+
+                 #get agent from azure foundry
                 claim_handler_def = await client.agents.get_agent(AGENTS_AND_QUERIES["ClaimHandlerAgent"]["id"])
                 claim_handler = AzureAIAgent(client=client, definition=claim_handler_def)
                 claim_handler_query = full_claim_query
@@ -104,16 +106,16 @@ async def process_claim_run_agents(custom_claim_query: str):
                 except json.JSONDecodeError:
                     logging.exception("Failed to parse JSON output from ClaimHandlerAgent. Attempting clarification...")
                     clarification_query = (
-                        "The output provided does not appear to be valid JSON. "
-                        "Please provide a valid JSON response (no markdown or additional text) following the specified structure."
+                        "The output provided does not appear to be valid JSON."
+                        "Please provide a valid JSON response following the specified structure."
                     )
                     clarification_output = await invoke_agent(claim_handler, clarification_query)
                     try:
                         structured_claim_str = str(clarification_output)
                         parsed_claim = json.loads(structured_claim_str)
                     except json.JSONDecodeError:
-                        logging.exception("Clarification attempt failed. Aborting pipeline.")
-                        results["error"] = "Clarification attempt failed. Aborting pipeline."
+                        logging.exception("Clarification attempt failed, stop process.")
+                        results["error"] = "Clarification attempt failed, stop process."
                         return results
 
                 results["Parsed Claim"] = parsed_claim
