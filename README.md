@@ -12,12 +12,11 @@ Git clone (repository-link)
 <br>Windows:
 `python -m venv venv`
 `venv\Scripts\activate`
-
-<br>macOS/Linux:
+macOS/Linux:
 `python -m venv venv`
 `source venv/bin/activate`
-3. **Install dependencies**
+4. **Install dependencies**
 `pip install -r requirements.txt`
-4. **Configure environment variables**
+5. **Configure environment variables**
 
 
