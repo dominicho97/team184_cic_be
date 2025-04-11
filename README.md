@@ -18,5 +18,7 @@ Git clone (repository-link)
 4. **Install dependencies**
 `pip install -r requirements.txt`
 5. **Configure environment variables**
+6.  **Run the application**
+`streamlit run app.py`
 
 
