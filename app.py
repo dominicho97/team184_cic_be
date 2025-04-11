@@ -173,7 +173,7 @@ async def process_claim_run_agents(custom_claim_query: str):
         results["error"] = str(e)
     return results
 
-st.title("Claim Processing Dashboard")
+st.title("Insurance claim dashboard")
 st.write("Enter your claim query below and click the button to process the claim using Azure AI Agents.")
 
 # text area 
